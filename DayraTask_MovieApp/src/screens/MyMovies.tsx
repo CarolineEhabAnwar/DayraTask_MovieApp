@@ -4,7 +4,7 @@ import { View, StyleSheet, Text } from 'react-native'
 const MyMovies: FC = () => {
     return (
         <View style={styles.container}>
-            <Text>This is My Movies Screen</Text>
+            <Text style={styles.text}>This is My Movies Screen</Text>
         </View>
     )
 }
@@ -16,5 +16,9 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    text: {
+        fontSize: 45,
+        color: 'black'
     }
 })

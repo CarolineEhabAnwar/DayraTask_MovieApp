@@ -1,10 +1,19 @@
 import React, { FC } from "react";
 import { View, StyleSheet, Text } from 'react-native'
+import MovieComponent from '../components/MovieComponent'
+
 
 const AllMovies: FC = () => {
     return (
         <View style={styles.container}>
-            <Text>This is All Movies Screen</Text>
+            <MovieComponent
+                Poster={require('../../assets/spiderman.jpg')}
+                Title="Movie Title"
+                Overview="This is the overview of the movie"
+                Rating="5.5"
+                ReleaseDate="25/5/2016"
+
+            />
         </View>
     )
 }
@@ -16,5 +25,9 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    text: {
+        fontSize: 45,
+        color: 'black'
     }
 })

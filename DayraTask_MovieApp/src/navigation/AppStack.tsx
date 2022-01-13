@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { createStackNavigator } from '@react-navigation/stack'
 import { AllMovies, MyMovies } from '../screens'
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, useColorScheme, View } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 const { Navigator, Screen } = createStackNavigator();
 
