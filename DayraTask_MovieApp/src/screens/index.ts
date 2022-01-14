@@ -1,4 +1,5 @@
-import AllMovies from './AllMovies'
-import MyMovies from './MyMovies'
+import MyMoviesScreen from './MyMoviesScreen'
+import AllMoviesScreen from './AllMoviesScreen'
+import MovieScreen from './MovieScreen'
 
-export { AllMovies, MyMovies }
+export { AllMoviesScreen, MyMoviesScreen, MovieScreen }

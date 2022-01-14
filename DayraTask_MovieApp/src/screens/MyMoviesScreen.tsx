@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { View, StyleSheet, Text } from 'react-native'
 
-const MyMovies: FC = () => {
+const MyMoviesScreen: FC = () => {
     return (
         <View style={styles.container}>
             <Text style={styles.text}>This is My Movies Screen</Text>
@@ -9,7 +9,7 @@ const MyMovies: FC = () => {
     )
 }
 
-export default MyMovies;
+export default MyMoviesScreen;
 
 const styles = StyleSheet.create({
     container: {
