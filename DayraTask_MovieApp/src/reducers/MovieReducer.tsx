@@ -1,31 +1,19 @@
-import { json } from 'overmind';
-import { useState } from 'react';
 import { Get_All_Movies, Add_Favourite_Movie, Remove_Favourite_Movie, Add_My_Movie, Remove_My_Movie } from '../actions/Types';
+import AsyncStorage from "@react-native-community/async-storage";
 
-declare interface IAction {
-    type: string;
-    data: any;
-}
+// This is the reducer file that should work with the Redux framework but it the states
+// were not updated and returned undefinded and therefore made some problems and I couldn't complete with this Framework
 
-export interface MyState {
-    AllMoviesList: Array<any>,
-    MyMoviesList: Array<any>,
-    FavouriteMoviesList: Array<any>,
-    isLoaded: boolean
-}
-
-let initialState: MyState = {
+const initialState =
+{
     AllMoviesList: [],
     MyMoviesList: [],
     FavouriteMoviesList: [],
     isLoaded: false
 
-}
+};
 
-
-const MovieReducer = async (state = initialState, action: IAction) => {
-
-    let temp;
+const MovieReducer = async (state = initialState, action: any) => {
 
     switch (action.type) {
 
@@ -60,6 +48,7 @@ const MovieReducer = async (state = initialState, action: IAction) => {
         }
         case Add_Favourite_Movie:
             {
+                await AsyncStorage.setItem('Favourites', JSON.stringify(state.FavouriteMoviesList.concat(action.data)));
                 return {
                     ...state,
                     FavouriteMoviesList: state.FavouriteMoviesList.concat(action.data)
@@ -67,13 +56,29 @@ const MovieReducer = async (state = initialState, action: IAction) => {
             }
         case Remove_Favourite_Movie:
             {
+                let temp = state.FavouriteMoviesList;
+                temp.forEach((element: any, index) => {
+                    if (element.id == action.data.id) temp.splice(index, 1);
+                });
+                if (temp == null) {
+                    temp = [];
+                    await AsyncStorage.removeItem('Favourites');
+                }
+                else {
+                    await AsyncStorage.setItem('Favourites', JSON.stringify(temp));
+                }
+
+                await AsyncStorage.setItem('Favourites', JSON.stringify(state.FavouriteMoviesList));
+
                 return {
                     ...state,
-                    FavouriteMoviesList: state.FavouriteMoviesList.filter(action.data)
+                    FavouriteMoviesList: temp
+
                 };
             }
         case Add_My_Movie:
             {
+                await AsyncStorage.setItem('MyMovies', JSON.stringify(state.MyMoviesList.concat(action.data)));
                 return {
                     ...state,
                     MyMoviesList: state.MyMoviesList.concat(action.data)
@@ -81,9 +86,23 @@ const MovieReducer = async (state = initialState, action: IAction) => {
             }
         case Remove_My_Movie:
             {
+                let temp = state.MyMoviesList;
+                temp.forEach((element: any, index) => {
+                    if (element.id == action.data.id) temp.splice(index, 1);
+                });
+                if (temp == null) {
+                    temp = [];
+                    await AsyncStorage.removeItem('MyMovies');
+                }
+                else {
+                    await AsyncStorage.setItem('MyMovies', JSON.stringify(temp));
+                }
+
+                await AsyncStorage.setItem('MyMovies', JSON.stringify(state.MyMoviesList));
+
                 return {
                     ...state,
-                    MyMoviesList: state.MyMoviesList.filter(action.data)
+                    MyMoviesList: temp
                 };
             }
         default:

@@ -1,9 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { FC, useEffect, useState } from 'react';
 import { Dimensions, View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native'
+import { Icon } from 'react-native-elements'
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../screens/RootStackParams';
 import { useDispatch } from 'react-redux';
+import { addFavouriteMovie, removeFavouriteMovie } from '../actions/MovieActions';
 import AsyncStorage from "@react-native-community/async-storage";
 
 
@@ -15,31 +17,32 @@ type Props = {
     MovieItem: any
 };
 
-type MovieComponentProp = StackNavigationProp<RootStackParamList, 'MovieComponent'>;
+type MyMovieComponentProp = StackNavigationProp<RootStackParamList, 'MovieComponent'>;
 
 
-const MovieComponent: FC<Props> = (MovieItem) => {
+const MyMoviesComponent: FC<Props> = (MovieItem) => {
 
-    const navigation = useNavigation<MovieComponentProp>();
-    // The following line of code was a part of the Redux framework, it was supposed to be responsible
-    // for firing up the needed actions
-    // const dispatch = useDispatch();
-    const [isFavourite, setIsFavourite] = useState(false);
+    const navigation = useNavigation<MyMovieComponentProp>();
+    const dispatch = useDispatch();
+    const [isFavourite, setIsFavourite] = useState(true);
     const [favouriteList, setFavouriteList] = useState<any[]>([]);
 
-
-    // I couldn't access the account id from the api key that I was given, so I decided to make my own Favourite movie
-    // list and save it the ASync Storage. Unfortunately, the Async Storage couldn't update the main screen everytime
-    // another movie was added to the favourites and therefore caused some problems in the Favourites section in My Movies
+    const [myList, setMyList] = useState<any[]>([]);
 
     const fetchMovies = async () => {
 
         const favourites = await AsyncStorage.getItem('Favourites');
+        const mine = await AsyncStorage.getItem('MyMovies');
+
         if (favourites != null) {
             setFavouriteList(JSON.parse(favourites));
         }
+        if (mine != null) {
+            setMyList(JSON.parse(mine));
+        }
 
     }
+
 
     // I was supposed to dispatch the addFavouriteMovie action in the Reducer, but due to some errer (always returning
     // undefined). I couldn't use the reducer and had to make my own function for adding and removing movies 
@@ -48,12 +51,13 @@ const MovieComponent: FC<Props> = (MovieItem) => {
     // const AddMovieToFavourite = (FavMovie: Movie) => dispatch(addFavouriteMovie(FavMovie))
     // const RemoveMovieFromFavourite = (FavMovie: Movie) => dispatch(removeFavouriteMovie(FavMovie))
 
-
     const AddMovieToFavourite = async (favMovie: any) => {
         let temp = favouriteList;
         temp.push(favMovie)
         setFavouriteList(temp);
+        console.log(temp)
         await AsyncStorage.setItem('Favourites', JSON.stringify(temp));
+
     }
 
     const RemoveMovieFromFavourite = async (favMovie: any) => {
@@ -72,10 +76,11 @@ const MovieComponent: FC<Props> = (MovieItem) => {
         }
     }
 
+
+
     useEffect(() => {
         fetchMovies();
     }, [])
-
 
     return (
         <View style={styles.container}>
@@ -94,7 +99,7 @@ const MovieComponent: FC<Props> = (MovieItem) => {
             <View style={styles.favourite}>
                 <TouchableOpacity onPress={() => {
                     if (isFavourite) {
-                        RemoveMovieFromFavourite(MovieItem.MovieItem)
+                        RemoveMovieFromFavourite(MovieItem)
                         setIsFavourite(false);
                     }
                     else {
@@ -116,7 +121,7 @@ const MovieComponent: FC<Props> = (MovieItem) => {
     )
 }
 
-export default MovieComponent;
+export default MyMoviesComponent;
 
 const styles = StyleSheet.create({
 

@@ -1,11 +1,8 @@
 import React, { FC } from 'react';
-import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack'
-import { AllMoviesScreen, MyMoviesScreen, MovieScreen } from '../screens'
-import { Button, Dimensions, Image, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../screens/RootStackParams';
+import { createStackNavigator } from '@react-navigation/stack'
+import { AllMoviesScreen, MyMoviesScreen, MovieScreen, AddMovieScreen } from '../screens'
+import { Dimensions, Image, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 const { Navigator, Screen } = createStackNavigator();
@@ -38,6 +35,23 @@ const MainStack: FC = () => {
             <Screen name="MovieScreen" component={MovieScreen}
                 options={{
                     title: 'Discover Movies',
+                    headerTitleAlign: "center",
+                    headerStyle: {
+                        backgroundColor: '#0E86D4',
+                        height: 0.09 * height,
+
+                    },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                        fontWeight: 'bold',
+                        fontSize: 0.06 * width,
+
+                    },
+                }} />
+
+            <Screen name="AddMovie" component={AddMovieScreen}
+                options={{
+                    title: 'Add New Movies',
                     headerTitleAlign: "center",
                     headerStyle: {
                         backgroundColor: '#0E86D4',

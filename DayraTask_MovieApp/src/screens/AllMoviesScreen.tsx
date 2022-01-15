@@ -1,38 +1,27 @@
-import React, { FC, useEffect, useLayoutEffect, useState } from "react";
-import { View, StyleSheet, ScrollView, Text, FlatList, Keyboard, Dimensions } from 'react-native'
+import React, { FC, useEffect, useState } from "react";
+import { View, StyleSheet, FlatList, Dimensions } from 'react-native'
 import MovieComponent from '../components/MovieComponent'
-import { useDispatch, useSelector } from 'react-redux';
-import { addFavouriteMovie, getAllMovies } from "../actions/MovieActions";
-import { Movie } from '../constants/Movie';
-import { MyState } from "../reducers/MovieReducer";
-import { AppState } from "../constants/Store";
-import { useLinkProps } from "@react-navigation/native";
-import { Header } from 'react-native-elements';
+import { useDispatch } from 'react-redux';
+import AsyncStorage from "@react-native-community/async-storage";
+import { Text } from "react-native-elements";
 
 
 const { height, width } = Dimensions.get('screen');
-const windowWidth = Dimensions.get('window');
 
 
-const AllMovieScreen: FC = (props) => {
+const AllMoviesScreen: FC = (props) => {
 
     const dispatch = useDispatch();
 
 
-    const [MovieItem, setMovieItem] = useState(new Movie());
     const [MoviesList, setMoviesList] = useState([]);
-
-
-    const [movieToBeAddedToFavourites, setMovietoBeAddedToFavourites] = useState(new Movie());
-
     const [isLoaded, setLoading] = useState(false);
-    // setMovieList(useSelector((state: IState) => state.AllMoviesList))
 
 
-    const Launch = async () => {
-        await dispatch(getAllMovies());
-
-    }
+    // Here I was supposed to fire the dispatch function
+    // const fetchMovies = () => dispatch(getAllMovies())
+    // but as I mentioned in the other screens, the Redux framework had an error that I couldn't resolve and hence used 
+    // another function
 
     const fetchMovies = async () => {
 
@@ -51,29 +40,24 @@ const AllMovieScreen: FC = (props) => {
 
     }, []);
 
-    // const bagarab = useSelector(async (state: AppState) => (await state).isLoaded)
-    // console.log(bagarab);
-
-
-
-
-
-    const addMovieToFavourites = (MovieItem: any) => dispatch(addFavouriteMovie(movieToBeAddedToFavourites))
 
     return (
-
-        <View style={{ backgroundColor: "black" }}>
-            <FlatList
-                data={MoviesList}
-                numColumns={2}
-                renderItem={({ item }) => (
-                    <View
-                        style={styles.container}>
-                        <MovieComponent
-                            MovieItem={item} />
-                    </View>
-                )} />
+        <View style={{ alignContent: "center" }}>
+            {isLoaded ? <View style={{ backgroundColor: "black" }} >
+                <FlatList
+                    data={MoviesList}
+                    numColumns={2}
+                    renderItem={({ item }) => (
+                        <View
+                            style={styles.container}>
+                            <MovieComponent
+                                MovieItem={item} />
+                        </View>
+                    )} />
+            </View > : <Text style={styles.text}>Loading ... </Text>}
         </View>
+
+
 
     );
 
@@ -95,19 +79,18 @@ const styles = StyleSheet.create({
         alignContent: "center",
         alignItems: "center",
         alignSelf: "center"
-        // width: 0.45 * windowWidth.width,
-        // height: 0.45 * windowWidth.height,
 
 
     },
     text: {
-        color: '#fff',
-        fontSize: 0.5 * width,
+        color: '#0E86D4',
+        fontSize: 0.05 * width,
         textAlign: "center",
         textAlignVertical: "center",
-        fontWeight: "bold"
+        fontWeight: "bold",
+        marginTop: height / 2.6
     }
 });
 
 
-export default AllMovieScreen;
+export default AllMoviesScreen;

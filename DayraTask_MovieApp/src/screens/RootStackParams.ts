@@ -3,5 +3,7 @@ export type RootStackParamList = {
     MyMoviesScreen: undefined;
     MovieScreen: {};
     MovieComponent: undefined;
+    MyMovieScreen: undefined
+    AddMovie: undefined
 
 };
